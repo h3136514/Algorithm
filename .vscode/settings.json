@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "vector": "cpp",
+        "queue": "cpp",
+        "xutility": "cpp",
+        "utility": "cpp",
+        "deque": "cpp",
+        "xstring": "cpp",
+        "2072_홀수만 더하기( sw expert )": "cpp"
+    }
+}
