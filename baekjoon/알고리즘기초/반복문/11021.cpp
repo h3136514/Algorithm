@@ -6,7 +6,7 @@ int main(){
     for(i=1;i<=T;i++){
         scanf("%d %d", &A, &B);
         sum=A+B;
-        printf("Case #%d: %d\n", i, sum);
+        printf("Case #%d: %d + %d = %d\n", i, A, B, sum);
     }
     
     return 0;
