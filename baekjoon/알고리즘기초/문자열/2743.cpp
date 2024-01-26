@@ -4,6 +4,6 @@ char str[101];
 
 int main(){
     scanf("%s", &str);
-    ("%d\n", strlen(str));
+    printf("%d\n", strlen(str));
     return 0;
 }
