@@ -5,6 +5,7 @@
 using namespace std;
 stack<char> st;
 
+// 괄호가 바르게 짝지어졌다는 것은 '(' 문자로 열렸으면 반드시 짝지어서 ')' 문자로 닫혀야 한다는 뜻입니다. (시간복잡도 : O(N))
 bool solution(string s)
 {
     bool answer = true;
