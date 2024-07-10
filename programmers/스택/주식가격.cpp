@@ -31,7 +31,8 @@ vector<int> solution(vector<int> prices) {
 int main() {
     vector<int> arr = solution({1, 2, 3, 2, 3});
     for(int i =0; i < arr.size(); i++){
-        cout << arr[i] << endl;
+        cout << arr[i] << " ";
     }
+    cout << endl;
     return 0;
 }
