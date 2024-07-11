@@ -5,7 +5,7 @@
 using namespace std;
 stack<int> st; //보드판에서 꺼낸 인형을 담을 스택
 
-// 인형뽑기로 가장 최근에 들어간 블럭과 현재 블럭이 같으면 터트리고 사라진 인형의 개수를 반환(시간복잡도 : O(N^2 + M))
+// 인형뽑기로 가장 최근에 들어간 블럭과 현재 블럭이 같으면 터트리고 사라진 인형의 개수를 반환(시간복잡도 : O(M*N))
 int solution(vector<vector<int>> board, vector<int> moves) {
     int answer = 0;
     
