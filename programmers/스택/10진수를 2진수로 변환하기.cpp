@@ -31,7 +31,6 @@ string solution(int n)
 #include <iostream>
 int main()
 {
-    //true를 출력하면 1 이고, false를 출력하면 0
     
     cout << solution(10) << endl;  // 1010
     cout << solution(27) << endl; // 11011 
