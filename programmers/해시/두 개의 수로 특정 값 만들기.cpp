@@ -2,7 +2,7 @@
 using namespace std;
 
 
-//  (시간복잡도 : O(N))
+// arr배열에서 특정 원소 두 개를 뽑아 두수의 합이 target과 같을 수 있는지 확인 (arr의 길이: N, target의 길이: K, 시간복잡도 : O(N + K))
 bool solution(vector<int> arr, int target)
 {   
     //target+1개의 공간이 있는 hash벡터 선언
