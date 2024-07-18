@@ -5,7 +5,7 @@ using namespace std;
 // 전화번호부를 저장하기 위한 해시맵
 unordered_map<string, int> phoneBook;
 
-// 전화번호부에 적힌 전화번호 중, 한 번호가 다른 번호의 접두어인 경우가 있는지 확인 (시간복잡도 : O(N)
+// 전화번호부에 적힌 전화번호 중, 한 번호가 다른 번호의 접두어인 경우가 있는지 확인 (시간복잡도 : O(N))
 bool solution(vector<string> phone_book) {
     // 전화번호부를 해시맵에 저장
     for(int i = 0; i < phone_book.size(); i++)
