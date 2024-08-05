@@ -4,7 +4,6 @@
 
 using namespace std;
 int n, m, x, y, distanceL, distanceE;
-int dist[101][101] = {0};   //해당좌표까지 거리합
 int visit[101][101] = {0}; //방문 유무
 // 오프셋 배열
 int dx[4] = {1, 0,-1, 0};
@@ -20,13 +19,12 @@ void init() {
     for(int i = 0 ; i < n ;i++){
         for(int j = 0 ; j < m ;j++){
             visit[i][j] = 0;
-            dist[i][j] = 0;
         }
     }
 }
 
 int bfs(char start, char target, vector<string> maps) {
-    queue<pair<int, pair<int,int>>> q;
+    queue<pair<int, pair<int,int>>> q;  // 거리합, 해당좌표를 저장하는 큐
     init();
     
     // 시작점 찾기
