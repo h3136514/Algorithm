@@ -3,8 +3,8 @@
 
 using namespace std;
 int N, num[301], sum;
-int dp1[301];   //이전에 이미 연속으로 뛰었을때의 최댓값
-int dp2[301];   //이전에 2칸씩 뛰었을때의 최댓값
+int dp1[301];   //이미 연속으로 뛰었을때의 최댓값
+int dp2[301];   //2칸씩 뛰었을때의 최댓값
 
 void stair() {
     if(N == 1) {
