@@ -29,7 +29,7 @@ void stair() {
     sum = max(dp1[N-1], dp2[N-1]);
 }
 
-// 계단 오르기 
+// 계단 오르기 (백준 2579번)
 int main() {
     cin >> N;
     for(int i =0; i < N; i++) {
