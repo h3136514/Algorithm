@@ -11,6 +11,10 @@ int main() {
             if(result == 0)
                 result = 10;
         }
+        // b가 1일 경우에도 처리
+        result %= 10;
+        if(result == 0)
+            result = 10;
         
         printf("%d\n",result);
     }
