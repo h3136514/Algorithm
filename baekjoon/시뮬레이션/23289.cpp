@@ -47,6 +47,7 @@ void pri() {
 
 // 온풍기 작동
 void working(int startX, int startY, int d) {
+	// 맨처음 한칸 이동(온풍기 방향)
 	startX += offer_X[d];
 	startY += offer_Y[d];
 	visitied[startY][startX] = 1;
@@ -73,17 +74,17 @@ void working(int startX, int startY, int d) {
 		// 양쪽 방향
 		int ix2 = ix1, ix3 = ix1, iy2 = iy1, iy3 = iy1;
 		int id2, id3, id4;
-		if (d < 2) {
-			iy2 += offer_Y[2];
-			iy3 += offer_Y[3];
-			id2 = 2, id3 = 3;
-			id4 = (d == 0) ? 1 : 0;
+		if (d < 2) {	//온풍기가 양옆에 작동할때(왼쪽 오른쪽)
+			iy2 += offer_Y[2];	// 위
+			iy3 += offer_Y[3];	// 아래
+			id2 = 2, id3 = 3;	// 현재좌표에(온풍기가나오는) 위, 아래 방향 벽확인
+			id4 = (d == 0) ? 1 : 0;	// 온풍기가 퍼질 좌표에 (온풍기가 나오는)반대표 방향(왼쪽, 오른쪽) 벽확인
 		}
-		else {
-			ix2 += offer_X[0];
-			ix3 += offer_X[1];
-			id2 = 0, id3 = 1;
-			id4 = (d == 2) ? 3 : 2;
+		else {// 온풍기가 위아래에 작동할때(위쪽 아래쪽)
+			ix2 += offer_X[0];	// 오른쪽
+			ix3 += offer_X[1];	// 왼쪽
+			id2 = 0, id3 = 1;	// 현재좌표에(온풍기가나오는) 오른쪽, 왼쪽 방향 벽확인
+			id4 = (d == 2) ? 3 : 2;	// 온풍기가 퍼질 좌표에 (온풍기가 나오는)반대표 방향(위, 아래쪽) 벽확인
 		}
 
 		if (check(ix2, iy2) && !visitied[iy2][ix2] && !v[currentY][currentX][id2] && !v[iy2][ix2][id4]) {
@@ -120,16 +121,16 @@ void temp() {
 
 	for (int i = 1; i <= R; i++) {
 		for (int j = 1; j <= C; j++) {
-			// 아랫방향(3), 오른쪽 방향(0) 비교
+			// 아랫방향(3), 오른쪽 방향(0) 비교(중복 비교 개선)
 			for (int l = 0; l < 4; l+= 3) {
-				if (v[i][j][l] == 1)
+				if (v[i][j][l] == 1)	// 벽이 있으면 넘어감
 					continue;
 				int ix = j + offer_X[l];
 				int iy = i + offer_Y[l];
 
-				if (!check(ix,iy) || board[i][j] == board[iy][ix])	// 범위가 아니거나 온도가 같은경우 넘어김
+				if (!check(ix,iy) || board[i][j] == board[iy][ix])	// 범위가 아니거나 온도가 같은 경우 넘어감
 					continue;
-
+				// 온도 퍼짐
 				if (board[i][j] > board[iy][ix]) {
 					int add = (board[i][j] - board[iy][ix]) / 4;
 					copyedBoard[i][j] -= add;
@@ -216,11 +217,11 @@ int main() {
 		cin >> Y >> X >> D;
 		if (D == 0) {
 			v[Y][X][2] = 1;	// 위 벽
-			v[Y-1][X][3] = 1;	// 아래 벽
+			v[Y-1][X][3] = 1;	// 아래 벽(맞은편)
 		}
 		else {
 			v[Y][X][0] = 1;	// 왼쪽 벽
-			v[Y][X+1][1] = 1;	// 오른쪽 벽
+			v[Y][X+1][1] = 1;	// 오른쪽 벽(맞은편)
 		}
 	}
 
