@@ -4,6 +4,8 @@
 
 using namespace std;
 int N, M, d, s, sharkX, sharkY, CNT[4], board[50][50];
+int offer_X[4] = {-1, 0, 1, 0};
+int offer_Y[4] = {0, 1, 0, -1};
 int blizard_X[6] = { 0, 0, -1, 1, -1, 1};
 int blizard_Y[6] = { -1, 1, 0, 0 , -1, 1};
 queue<pair<int, int>> q, AB;
@@ -24,6 +26,255 @@ void blizard() {
 	}
 }
 
+// 이동
+void move(int x, int y) {
+	if(board[y][x] == 0)
+		q.push({ x, y });
+	else if (!q.empty()) {
+		board[q.front().second][q.front().first] = board[y][x];
+		board[y][x] = 0;
+		q.pop();
+
+		q.push({ x, y });
+	}
+	
+}
+
+// 구슬이동
+void moveGoosole() {
+	int startX = sharkX, startY = sharkY;
+    int id = 3, num = 1;
+    // 달팽이 회전
+    while(true){
+        for(int i = 0; i < 2; i++){
+            id = (id == 3) ? 0 : id+1;  // 반시계 회전 
+
+            for(int j = 0; j < num; j++){   // 두번씩
+                startX += offer_X[id];
+                startY += offer_Y[id];
+
+                if(!check(startX, startY)){
+                    while (!q.empty())
+		                q.pop();
+                    return;
+                }
+
+                move(startX, startY);
+            }
+        }
+        num++;
+
+    }
+}
+
+bool explos(int color, int cnt, int x, int y) {
+	bool changeColor = false;
+	if (board[y][x] == color) {
+		q.push({ x, y });
+	}
+	else {
+		changeColor = true;
+		if (cnt >= 4) {
+			while (!q.empty()) {
+				board[q.front().second][q.front().first] = 0;
+				CNT[color]++;
+				q.pop();
+			}
+		}
+		else {
+			while (!q.empty()) {
+				board[q.front().second][q.front().first] = color;
+				q.pop();
+			}
+		}
+	}
+
+	return changeColor;
+}
+
+// 구슬 폭발
+bool explosGoosole() {
+	bool checked = false;
+    int startX = sharkX, startY = sharkY;
+    int id = 3, num = 1, cnt = 0;
+    int color = board[startY][startX-1];
+
+    // 달팽이 회전
+    while(true){
+        for(int i = 0; i < 2; i++){
+            id = (id == 3) ? 0 : id+1;  // 반시계 회전 
+
+            for(int j = 0; j < num; j++){   // 두번씩
+                startX += offer_X[id];
+                startY += offer_Y[id];
+
+                if(!check(startX, startY)){
+                    while (!q.empty())
+		                q.pop();
+
+                    return checked;
+                }
+                
+                if (explos(color, cnt, startX, startY)) {
+                    if (cnt >= 4)   // 구슬 폭발 유무 확인
+                        checked = true;
+                    cnt = 1;
+                    color = board[startY][startX];
+                    q.push({ startX, startY });
+                }
+                else
+                    cnt++;
+            }
+        }
+        num++;
+    }
+}
+
+// 구슬 변화
+void changeGoosole() {
+    int startX = sharkX, startY = sharkY;
+    int id = 3, num = 1, cnt = 0;
+    int color = board[startY][startX-1];
+    bool outside = false;
+    // 달팽이 회전( A(구슬의 갯수), B(구슬의 색깔) 구하기)
+    while(true){
+        for(int i = 0; i < 2; i++){
+            id = (id == 3) ? 0 : id+1;  // 반시계 회전 
+
+            for(int j = 0; j < num; j++){   // 두번씩
+                startX += offer_X[id];
+                startY += offer_Y[id];
+
+                if(!check(startX, startY)){
+                    outside = true;
+                    break;
+                }
+                
+                if (board[startY][startX] == color) {
+                    cnt++;
+                }
+                else {
+                    AB.push({ cnt, color });
+    
+                    cnt = 1;
+                    color = board[startY][startX];
+                }
+    
+                board[startY][startX] = 0;
+            }
+
+            if(outside)
+                break;
+        }
+
+        if(outside)
+            break;
+        num++;
+    }
+
+	// 구슬이 없으면
+	if (AB.empty())
+		return;
+	
+
+	startX = sharkX, startY = sharkY;
+    id = 3, num = 1;
+    int idx = 0;
+    cnt = AB.front().first;
+	color = AB.front().second;
+	AB.pop();
+
+    // 달팽이 회전(A, B 대입)
+    while(true){
+        for(int i = 0; i < 2; i++){
+            id = (id == 3) ? 0 : id+1;  // 반시계 회전 
+
+            for(int j = 0; j < num; j++){   // 두번씩
+                startX += offer_X[id];
+                startY += offer_Y[id];
+
+                if(!check(startX, startY)){
+                    while (!AB.empty())
+		                AB.pop();
+                    return;
+                }
+
+                if (idx == 0) {
+                    idx++;
+                    board[startY][startX] = cnt;
+                }
+                else if (idx == 1) {
+                    idx = 0;
+                    board[startY][startX] = color;
+    
+                    if (AB.empty()) {
+                        return;
+                    }
+    
+                    cnt = AB.front().first;
+                    color = AB.front().second;
+    
+                    AB.pop();
+                }
+            }
+        }
+        num++;
+    }
+}
+
+// 출력(디버그용)
+void pri() {
+	cout << "-------------------------\n";
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			cout << board[i][j] << " ";
+		}
+		cout << "\n";
+	}
+	cout << "-------------------------\n";
+}
+
+// 초기화
+void init() {
+	while (!AB.empty())
+		AB.pop();
+	while (!q.empty())
+		q.pop();
+}
+
+// 마법사 상어와 블리자드
+int main() {
+	cin >> N >> M;
+	for (int i = 1; i <= N; i++) {
+		for (int j = 1; j <= N; j++) {
+			cin >> board[i][j];
+		}
+	}
+	sharkX = (N + 1) / 2;
+	sharkY = (N + 1) / 2;
+
+	for (int j = 0; j < M; j++) {
+		cin >> d >> s;
+
+		blizard();
+	
+		moveGoosole();
+
+		while(explosGoosole())
+			moveGoosole();
+
+		changeGoosole();
+        
+		init();
+	}
+
+	cout << CNT[1] + CNT[2] * 2 + CNT[3] * 3 << "\n";
+
+	return 0;
+}
+
+// 달팽이 회전 일일이하기
+/*
 // 이동
 void move(int x, int y) {
 	if(board[y][x] == 0)
@@ -161,21 +412,6 @@ bool explosGoosole() {
 		}
 	}
 
-
-	if (color != 0 && cnt >= 4)
-		checked = true;
-
-	// 마지막까지 넣지 못함 1~3개 구슬
-	if (color != 0 && cnt < 4 && !q.empty()) {
-		while (!q.empty()) {
-			if (cnt-- <= 0)
-				break;
-			board[q.front().second][q.front().first] = color;
-			q.pop();
-		}
-
-	}
-	
 	while (!q.empty())
 		q.pop();
 
@@ -259,14 +495,6 @@ void changeGoosole() {
 	if (cnt != 1 && color != 0) {
 		AB.push({ cnt, color });
 	}
-
-	/*
-	while (!AB.empty()) {
-		cout << AB.front().first << "," << AB.front().second << "\n";
-
-		AB.pop();
-	}
-	*/
 	
 	if (AB.empty())
 		return;
@@ -392,54 +620,4 @@ void changeGoosole() {
 	while (!AB.empty())
 		AB.pop();
 }
-
-// 출력(디버그용)
-void pri() {
-	cout << "-------------------------\n";
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			cout << board[i][j] << " ";
-		}
-		cout << "\n";
-	}
-	cout << "-------------------------\n";
-}
-
-// 초기화
-void init() {
-	while (!AB.empty())
-		AB.pop();
-	while (!q.empty())
-		q.pop();
-}
-
-// 마법사 상어와 블리자드
-int main() {
-	cin >> N >> M;
-	for (int i = 1; i <= N; i++) {
-		for (int j = 1; j <= N; j++) {
-			cin >> board[i][j];
-		}
-	}
-	sharkX = (N + 1) / 2;
-	sharkY = (N + 1) / 2;
-
-	for (int j = 0; j < M; j++) {
-		cin >> d >> s;
-
-		blizard();
-		
-		moveGoosole();
-
-		while(explosGoosole())
-			moveGoosole();
-		
-		changeGoosole();
-
-		init();
-	}
-
-	cout << CNT[1] + CNT[2] * 2 + CNT[3] * 3 << "\n";
-
-	return 0;
-}
+*/
