@@ -15,7 +15,6 @@ queue<pair<int, int>> ragerQ, shawdowQ;
 queue<int> warrior[51][51], copyedWarrior[51][51];
 priority_queue<pair<int, int>> distQ;
 vector<pair<int, int>> V[4];
-map<int, int> warriorState; // 1. 활동, 2. 돌, 0. 죽음
 
 // 범위 체크
 bool check(int x, int y) {
@@ -101,8 +100,6 @@ void checkMeetWarrior(int x, int y) {
 	while (!warrior[y][x].empty()) {
 		int idx = warrior[y][x].front();
 		warrior[y][x].pop();
-
-		warriorState[idx] = 0;
 	}
 }
 // 그림자 설정
@@ -157,7 +154,6 @@ void shadows(int dir, int x, int y) {
 	for (int i = 0; i < warrior[y][x].size(); i++) {
 		int idx = warrior[y][x].front();
 		warrior[y][x].pop();
-		warriorState[idx] = 2;
 		warrior[y][x].push(idx);
 	}
 
@@ -331,7 +327,6 @@ void moveWarrior() {
 void checkAttack() {
 	while (!warrior[Sr][Sc].empty()) {
 		attackSum++;
-		warriorState[warrior[Sr][Sc].front()] == 0;
 		warrior[Sr][Sc].pop();
 	}
 }
@@ -342,7 +337,6 @@ int main() {
 	cin >> Sr >> Sc >> Er >> Ec;
 	for (int i = 0; i < M; i++) {
 		cin >> Ar >> Ac;
-		warriorState[i + 1] = 1;	// 상태 설정
 		warrior[Ar][Ac].push(i + 1);
 	}
 	for (int i = 0; i < N; i++) {
