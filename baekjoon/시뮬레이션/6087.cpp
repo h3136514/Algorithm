@@ -15,10 +15,10 @@ bool check(int x, int y){
     return x >= 0 && x < W && y >= 0 && y < H;
 }
 
-void dijkstra(int startX, int startY, int d){
-    q.push({{0, d},{startX, startY}});
+void dijkstra(int startX, int startY){
+    //q.push({{0, d},{startX, startY}});
     dp[startY][startX] = 0;
-    visitied[startX][startY]++;
+    visitied[startY][startX]++;
 
     while(!q.empty()){
         int currentCnt = -q.top().first.first;
@@ -32,7 +32,7 @@ void dijkstra(int startX, int startY, int d){
 
         if(currentX == C[1].first && currentY == C[1].second){
             CNT = min(CNT, currentCnt);
-            continue;
+            return;
         }
 
         for(int i = 0; i < 4; i++){
@@ -40,7 +40,7 @@ void dijkstra(int startX, int startY, int d){
             int iy = currentY + offer_Y[i];
             int icnt = (i != currentdir) ? currentCnt + 1 : currentCnt;
 
-            if(check(ix, iy) && s[iy][ix] != '*' && dp[iy][ix] >= icnt){
+            if(check(ix, iy) && s[iy][ix] != '*' && dp[iy][ix] >= icnt && visitied[iy][ix] < 4){    // visitied[iy][ix] : 중복 방문 처리(4방향만)
                 dp[iy][ix] = icnt;
                 visitied[iy][ix]++;
 
@@ -70,8 +70,11 @@ int main(){
         }
     }
 
+    // 4방향 고려
     for(int i = 0; i < 4; i++)
-        dijkstra(C[0].first, C[0].second, i);
+        q.push({{0, i},{C[0].first, C[0].second}});
+
+    dijkstra(C[0].first, C[0].second);
 
     cout << CNT << "\n";
 
