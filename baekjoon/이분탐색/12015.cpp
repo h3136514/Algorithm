@@ -5,6 +5,7 @@ using namespace std;
 int N;
 vector<int> num, result;
 
+// 이분탐색 => LIS 수열을 이루는 원소 중 탐색 원소와 '가장 차이가 안나면서 더 큰' 원소를 찾음
 int idxBinarySearch(int a) {
     int s = 0, e = result.size() - 1;
     int idx = e;
