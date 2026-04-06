@@ -1,14 +1,16 @@
 #include <iostream>
 #include <string>
 #include <queue>
+#include <vector>
 
 #define INF 987654321
 using namespace std;
-int w, h, num, visitied[20][20][11], targetX, targetY, CNT;
+int w, h, num, visitied[20][20], targetX, targetY, CNT;
 int offer_X[4] = {1, 0, -1, 0};
 int offer_Y[4] = {0, 1, 0, -1};
 string room[20];
-queue<pair<pair<int, int>, pair<int, int>>> q;
+queue<pair<pair<int, int>, int>> q;
+vector<pair<int, int>> v;
 
 bool check(int x, int y){
     if(room[y][x] == 'x')
@@ -21,16 +23,14 @@ void init(){
     CNT = INF;
     for(int i = 0; i < h; i++){
         for(int j = 0; j < w; j++){
-            for(int k = 0; k <= 10; k++){
-                visitied[i][j][k] = INF;
-            }
+            visitied[i][j] = 0;
         }
     }
 }
 
-void bfs(){
-    visitied[targetY][targetX][0] = 0;
-    q.push({{targetX, targetY}, {0, 0}});
+void bfs(int startX, int startY, int endX, int endY){
+    visitied[startY][startX] = 1;
+    q.push({{startX, startY},  0});
 
     while(!q.empty()){
         int currentX = q.front().first.first;
