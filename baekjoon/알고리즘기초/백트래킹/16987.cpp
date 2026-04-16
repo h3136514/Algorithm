@@ -14,11 +14,12 @@ void backtracking(int idx, int cnt, vector<pair<int, int>> egg){
     
     int currentS = egg[idx].first;
     int currentW = egg[idx].second;
-    if(currentS == 0){
+    if(currentS <= 0){
         backtracking(idx+1, cnt, egg);
         return;
     }
 
+    bool check = false;
     for(int i = 0; i < N; i++){
         int is = egg[i].first;
         int iw = egg[i].second;
@@ -27,25 +28,33 @@ void backtracking(int idx, int cnt, vector<pair<int, int>> egg){
         if(i==idx)
             continue;
 
-        if(is == 0){
+        if(is <= 0){
             if(i == N-1){
                 backtracking(idx+1, cnt, egg);
             }
             continue;
         }
 
-        vector<pair<int, int>> tmp = egg;
-        tmp[i].first = (is - currentW < 0) ? 0: is - currentW;
-        tmp[idx].first = (currentS - iw < 0) ? 0 : currentS - iw;
+        egg[i].first =  is - currentW;
+        egg[idx].first = currentS - iw;
 
-        if(tmp[i].first == 0)
+        if(egg[i].first <= 0){
             icnt++;
-        if(tmp[idx].first == 0)
+            check = true;
+        }
+        if(egg[idx].first <= 0){
             icnt++;
+            check = true;
+        }
 
-        backtracking(idx+1, icnt, tmp);
+        backtracking(idx+1, icnt, egg);
+
+        egg[i].first =  is;
+        egg[idx].first = currentS;
     }
 
+    if(!check)
+       backtracking(idx+1, cnt, egg);
 }
 
 // 계란으로 계란치기
