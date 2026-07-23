@@ -1,4 +1,4 @@
-https://school.programmers.co.kr/learn/courses/30/lessons/43165
+# https://school.programmers.co.kr/learn/courses/30/lessons/43165
 def DFS(total, idx, numbers, target):
     if idx == len(numbers):
         if(total == target):
