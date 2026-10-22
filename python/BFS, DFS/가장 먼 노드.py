@@ -14,7 +14,7 @@ def solution(n, edge):
         graph[v].append(u)
     
     q.append([0, 1])
-    visitied[1] = 1;
+    visitied[1] = 1
     while q:
         dist, v = q.popleft()
         if dist > maxDist:
